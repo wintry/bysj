@@ -8,7 +8,7 @@ from app.exceptions import  app_exception
 
 from utils import MD5_util,response_util,data_util
 
-from config import settings
+# from config import settings
 
 user_bp=Blueprint('user_bp',url_prefix='/user')
 
@@ -36,7 +36,76 @@ async def login(request):
         token = str(uuid.uuid4()).replace('-', '')
     except Exception:
         raise app_exception.data_error('set token fail')
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''update "user" set token = $1 WHERE id = $2''')
+        await stmt.fetchrow(token,user_id)
     return response.json(response_util.success(user =user,token =token))
+
+@user_bp.post('/edit_phone')
+@data_util.token_check_one
+async def edit_phone(request):
+    data = request.json
+    user_id = request.form.get('user_id')
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''update "user" set phone = $1 WHERE id = $2''')
+        await stmt.fetchrow(data['phone'],user_id)
+    return response.json({"status": "succeed"})
+
+
+
+@user_bp.post('/edit_pwd')
+@data_util.token_check_one
+async def edit_pwd(request):
+    data=request.json
+    user_id = request.form.get('user_id')
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''select * from "user" WHERE id = $1''')
+        user = dict(await stmt.fetchrow(user_id))
+    newPwd = MD5_util.md5Encode(str(data['pwd']))
+    if not newPwd==user['pwd']:
+        raise app_exception.data_error('密码错误')
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''update  "user" set pwd = $1 WHERE id = $2''')
+        await stmt.fetchrow(newPwd,user_id))
+    return response.json({"status": "succeed"})
+
+@user_bp.post('/add_user')
+@data_util.token_check_two
+async def add_user(request):
+    data = request.json        
+    try :
+        data['username']
+        data['pwd']
+        data['phone']
+    except KeyError as e:
+        raise app_exception.params_error(str(e)+'is empty or wrong')
+
+    newPwd = MD5_util.md5Encode(str(data['pwd']))
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''insert into  "user" (username,pwd,phone,lv) values ($1,$2,$3,1) ''')
+        await stmt.fetchrow(data['username'],newPwd,data['phone']))
+    return response.json({"status": "succeed"})
+
+
+@user_bp.post('/add_user_two')
+@data_util.token_check_three
+async def add_user_two(request):
+    data = request.json        
+    try :
+        data['username']
+        data['pwd']
+        data['phone']
+    except KeyError as e:
+        raise app_exception.params_error(str(e)+'is empty or wrong')
+
+    newPwd = MD5_util.md5Encode(str(data['pwd']))
+    async with user_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''insert into  "user" (username,pwd,phone,lv) values ($1,$2,$3,2) ''')
+        await stmt.fetchrow(data['username'],newPwd,data['phone']))
+    return response.json({"status": "succeed"})
+
+
+
 
 # @user_bp.post('/logout')
 # @data_util.token_check

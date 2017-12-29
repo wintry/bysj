@@ -3,6 +3,7 @@ from sanic import Sanic,response
 
 from app.exceptions import app_exception
 from app.bp.user_bp import user_bp
+from app.bp.product_bp import product_bp
 from app.pg.pg import *
 
 
@@ -11,13 +12,14 @@ app = Sanic(__name__)
 
 #register blueprint
 app.blueprint(user_bp)
+app.blueprint(product_bp)
 
 
 @app.listener('after_server_start')
 async def notify_server_started(app, loop):
     db_pool = await setup_connection()
     user_bp.pool = db_pool
-
+    product_bp.pool = db_pool
     pass
 
 
