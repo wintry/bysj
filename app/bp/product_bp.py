@@ -58,3 +58,8 @@ async def add_line(request):
         stmt = await conn.prepare('''insert into  "product" (name,lv) values ($1,$2) ''')
         await stmt.fetchrow(data['name'],data['product_id']))
     return response.json({"status": "succeed"})
+
+
+@product_bp.get('/get_all_product')
+@data_util.token_check_three
+async def add_line(request):
