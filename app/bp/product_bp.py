@@ -27,6 +27,9 @@ async def add_product(request):
 
 @product_bp.post('/edit_product')
 async def edit_product(request):
+    user = await  data_util.token(request, 3)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
     data = request.json
     try:
         data['product_id']

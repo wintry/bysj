@@ -69,3 +69,14 @@ post
 }  
 
 
+修改产品和产品节点  带token 
+/product/edit_product  
+post 
+{
+	"name":"sony ps4 pro"
+}  
+{
+    "status": "succeed"
+}   
+
+
