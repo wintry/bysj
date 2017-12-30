@@ -183,3 +183,25 @@ post
     "message": "no permission",
     "status": "002"
 }
+
+搜bug token  
+http://0.0.0.0:8080/bugs/se_bug  
+post  
+{
+	"key":"nm",
+}  
+{
+    "msg_code": "001",
+    "product": [
+        {
+            "line_id": 2,
+            "user_id": 2,
+            "img": "sadfasd",
+            "product_id": 1,
+            "id": 1,
+            "title": "cnm",
+            "create_time": "asdas",
+            "detail": "阿萨德飞洒1"
+        }
+    ]
+}

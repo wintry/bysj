@@ -38,3 +38,18 @@ async def edit_bug(request):
         stmt = await conn.prepare('''update  "bugs" set  title=$1, detail=$2, img=$3, product_id=$4, line_id=$5, create_time=$6 where id = $7 ''')
         await stmt.fetchrow(data['title'],data['detail'],data['img'],data['product_id'],data['line_id'],data['time'],data['id'])
     return response.json({"status": "succeed"})
+
+@bugs_bp.post('/se_bug')
+async def se_bugs(request):
+    user = await  data_util.token(request, 1)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
+    data = request.json
+    async with bugs_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''select * from "bugs" WHERE title ~ $1''')
+        bugs = await stmt.fetch(data['key'])
+    bug_list = []
+    for i in bugs:
+        bug_list.append(dict(i))
+    return response.json(response_util.success(product=bug_list))
