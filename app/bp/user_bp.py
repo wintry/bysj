@@ -57,17 +57,22 @@ async def edit_phone(request):
 
 @user_bp.post('/edit_pwd')
 async def edit_pwd(request):
+    user = await  data_util.token(request, 1)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
     data=request.json
-    user_id = request.form.get('user_id')
+    user_id = user['id']
     async with user_bp.pool.acquire() as conn:
         stmt = await conn.prepare('''select * from "user" WHERE id = $1''')
         user = dict(await stmt.fetchrow(user_id))
     newPwd = MD5_util.md5Encode(str(data['pwd']))
+    print(MD5_util.md5Encode("aaa"))
     if not newPwd==user['pwd']:
         raise app_exception.data_error('密码错误')
     async with user_bp.pool.acquire() as conn:
         stmt = await conn.prepare('''update  "user" set pwd = $1 WHERE id = $2''')
-        await stmt.fetchrow(newPwd,user_id)
+        await stmt.fetchrow(MD5_util.md5Encode(data['new_pwd']),user_id)
     return response.json({"status": "succeed"})
 
 @user_bp.post('/add_user')

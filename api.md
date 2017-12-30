@@ -14,7 +14,7 @@ post
     "msg_code": "001"
 }  
 
-修改手机  
+修改手机 带token 
 user/eidt_phone  
 post  
 {"phone":"13777777777"}  
@@ -22,3 +22,13 @@ post
     "status": "succeed"
 }  
 
+修改密码 带token  
+user/edit_pwd  
+post  
+{
+	"pwd":"bbb",
+	"new_pwd":"aaa"
+}  
+{
+    "status": "succeed"
+}
