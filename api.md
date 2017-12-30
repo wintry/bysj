@@ -104,5 +104,32 @@ post
 	"product_id":1
 }  
 
+根据产品id获得节点 带token  
+/product/get_line  
+post  
+{
+	
+	"product_id":1
+}  
 
+{
+    "product": [
+        {
+            "name": "ps4",
+            "fid": 1,
+            "id": 2
+        },
+        {
+            "name": "ps4 slim",
+            "fid": 1,
+            "id": 3
+        },
+        {
+            "name": "ps4 pro",
+            "fid": 1,
+            "id": 4
+        }
+    ],
+    "msg_code": "001"
+}
 

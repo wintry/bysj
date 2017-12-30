@@ -83,6 +83,21 @@ async def add_line(request):
     return response.json({"status": "succeed"})
 
 
+@product_bp.post('/get_line')
+async def get_line_by_product(request):
+    user = await  data_util.token(request, 1)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+    data = request.json
+    async with product_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''select * from "product" WHERE fid = $1''')
+        product = await stmt.fetch(data['product_id'])
+    product_list=[]
+    for i in product:
+        product_list.append(dict(i))
+    return response.json(response_util.success(product=product_list))
+
+
 # @product_bp.get('/get_all_product')
 # @data_util.token_check_three
 # async def add_line(request):
