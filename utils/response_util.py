@@ -1,6 +1,6 @@
 
 
-SUCCESS = ''
+SUCCESS = '001'
 
 def success(message= None,**kw):
     return ret(SUCCESS,message,**kw)
