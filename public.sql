@@ -1,26 +1,26 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost_2345
+ Source Server         : bysj
  Source Server Type    : PostgreSQL
- Source Server Version : 90604
- Source Host           : localhost:2345
- Source Catalog        : crazyrebate
+ Source Server Version : 90510
+ Source Host           : localhost:5432
+ Source Catalog        : bysj
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 90604
+ Target Server Version : 90510
  File Encoding         : 65001
 
- Date: 23/08/2017 16:24:13
+ Date: 30/12/2017 17:58:05
 */
 
 
 -- ----------------------------
--- Sequence structure for sort_id_seq
+-- Sequence structure for bugs_id_seq
 -- ----------------------------
-DROP SEQUENCE IF EXISTS "public"."sort_id_seq";
-CREATE SEQUENCE "public"."sort_id_seq" 
+DROP SEQUENCE IF EXISTS "public"."bugs_id_seq";
+CREATE SEQUENCE "public"."bugs_id_seq" 
 INCREMENT 1
 MINVALUE  1
 MAXVALUE 9223372036854775807
@@ -28,34 +28,74 @@ START 1
 CACHE 1;
 
 -- ----------------------------
--- Table structure for share
+-- Sequence structure for logs_id_seq
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."share";
-CREATE TABLE "public"."share" (
-  "id" uuid NOT NULL DEFAULT NULL,
-  "title" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "content" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "url" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "click amount" int4 DEFAULT NULL,
-  "view_quantity" int4 DEFAULT NULL,
-  "r_id" uuid DEFAULT NULL,
-  "create_time" timestamp(0) DEFAULT NULL,
-  "tag" json DEFAULT NULL,
-  "sort" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "score" float4 DEFAULT NULL,
-  "price" float4 DEFAULT NULL,
-  "img" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL
+DROP SEQUENCE IF EXISTS "public"."logs_id_seq";
+CREATE SEQUENCE "public"."logs_id_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
+-- Sequence structure for product_id_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "public"."product_id_seq";
+CREATE SEQUENCE "public"."product_id_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
+-- Sequence structure for user_id_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "public"."user_id_seq";
+CREATE SEQUENCE "public"."user_id_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
+-- Table structure for bugs
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."bugs";
+CREATE TABLE "public"."bugs" (
+  "id" int4 NOT NULL DEFAULT nextval('bugs_id_seq'::regclass),
+  "title" varchar(200) COLLATE "pg_catalog"."default",
+  "detail" varchar(200) COLLATE "pg_catalog"."default",
+  "img" varchar(200) COLLATE "pg_catalog"."default",
+  "product_id" int4,
+  "line_id" int4,
+  "create_time" varchar(200) COLLATE "pg_catalog"."default",
+  "user_id" int4
 )
 ;
 
 -- ----------------------------
--- Table structure for sort
+-- Table structure for logs
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."sort";
-CREATE TABLE "public"."sort" (
-  "id" int4 NOT NULL DEFAULT nextval('sort_id_seq'::regclass),
-  "pid" int4 DEFAULT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL
+DROP TABLE IF EXISTS "public"."logs";
+CREATE TABLE "public"."logs" (
+  "id" int4 NOT NULL DEFAULT nextval('logs_id_seq'::regclass),
+  "content" varchar(100) COLLATE "pg_catalog"."default",
+  "user_id" int4,
+  "create_time" varchar(20) COLLATE "pg_catalog"."default"
+)
+;
+
+-- ----------------------------
+-- Table structure for product
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."product";
+CREATE TABLE "public"."product" (
+  "id" int4 NOT NULL DEFAULT nextval('product_id_seq'::regclass),
+  "name" varchar(50) COLLATE "pg_catalog"."default",
+  "fid" int4
 )
 ;
 
@@ -64,64 +104,54 @@ CREATE TABLE "public"."sort" (
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."user";
 CREATE TABLE "public"."user" (
-  "id" uuid NOT NULL DEFAULT NULL,
-  "phone" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "nickname" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "pwd" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "create_time" timestamp(6) DEFAULT NULL::timestamp without time zone,
-  "share_stars" int4 DEFAULT NULL,
-  "share_click" int4 DEFAULT NULL,
-  "evaluation" int2 DEFAULT NULL,
-  "sex" bool DEFAULT NULL,
-  "avater" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "star" uuid[] DEFAULT NULL
+  "id" int4 NOT NULL DEFAULT nextval('user_id_seq'::regclass),
+  "username" varchar(10) COLLATE "pg_catalog"."default" NOT NULL,
+  "pwd" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+  "phone" varchar(11) COLLATE "pg_catalog"."default" NOT NULL,
+  "token" varchar(50) COLLATE "pg_catalog"."default",
+  "lv" int4
 )
 ;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO "public"."user" VALUES ('3b3adfd0-72a4-4e19-b192-b7272bcb8af5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO "public"."user" VALUES ('3b3adfd0-72a4-4e19-b192-b7272bcb8af7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO "public"."user" VALUES ('3b3adfd0-72a4-4e19-b192-b7272bcb8af6', '18758290214', NULL, 'ad57484016654da87125db86f4227ea3', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
--- ----------------------------
--- Table structure for user_share
--- ----------------------------
-DROP TABLE IF EXISTS "public"."user_share";
-CREATE TABLE "public"."user_share" (
-  "id" uuid NOT NULL DEFAULT NULL,
-  "user_id" int4 DEFAULT NULL,
-  "share_id" int4 DEFAULT NULL,
-  "score" int2 DEFAULT NULL,
-  "content" varchar(255) COLLATE "pg_catalog"."default" DEFAULT NULL,
-  "is_bought" bool DEFAULT NULL
-)
-;
+INSERT INTO "public"."user" VALUES (2, 'yjg', '08f8e0260c64418510cefb2b06eee5cd', '18777777777', NULL, 1);
+INSERT INTO "public"."user" VALUES (3, 'yjg1', '08f8e0260c64418510cefb2b06eee5cd', '18777777777', NULL, 2);
+INSERT INTO "public"."user" VALUES (1, 'xuyh', '47bce5c74f589f4867dbd57e9ca9f808', '13766666666', '20d3c632b21040ed95dfe8a1756cce7f', 3);
 
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
-ALTER SEQUENCE "public"."sort_id_seq"
-OWNED BY "public"."sort"."id";
-SELECT setval('"public"."sort_id_seq"', 2, false);
+ALTER SEQUENCE "public"."bugs_id_seq"
+OWNED BY "public"."bugs"."id";
+SELECT setval('"public"."bugs_id_seq"', 2, true);
+ALTER SEQUENCE "public"."logs_id_seq"
+OWNED BY "public"."logs"."id";
+SELECT setval('"public"."logs_id_seq"', 2, true);
+ALTER SEQUENCE "public"."product_id_seq"
+OWNED BY "public"."product"."id";
+SELECT setval('"public"."product_id_seq"', 3, true);
+ALTER SEQUENCE "public"."user_id_seq"
+OWNED BY "public"."user"."id";
+SELECT setval('"public"."user_id_seq"', 4, true);
 
 -- ----------------------------
--- Primary Key structure for table share
+-- Primary Key structure for table bugs
 -- ----------------------------
-ALTER TABLE "public"."share" ADD CONSTRAINT "share_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."bugs" ADD CONSTRAINT "bugs_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table sort
+-- Primary Key structure for table logs
 -- ----------------------------
-ALTER TABLE "public"."sort" ADD CONSTRAINT "sort_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."logs" ADD CONSTRAINT "logs_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table product
+-- ----------------------------
+ALTER TABLE "public"."product" ADD CONSTRAINT "product_id_pk" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table user
 -- ----------------------------
-ALTER TABLE "public"."user" ADD CONSTRAINT "user_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table user_share
--- ----------------------------
-ALTER TABLE "public"."user_share" ADD CONSTRAINT "user_share_pkey" PRIMARY KEY ("id");
+ALTER TABLE "public"."user" ADD CONSTRAINT "user_id_pk" PRIMARY KEY ("id");
