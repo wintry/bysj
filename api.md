@@ -151,4 +151,17 @@ post
     ]
 }
   
-
+添加bug 带token  
+/bugs/add_bug  
+post  
+{
+	"title":"cnm",
+	"detail":"阿萨德飞洒",
+	"product_id":1,
+	"line_id":2,
+	"time":"asdas",
+	"img":"sadfasd"
+}  
+{
+    "status": "succeed"
+}
