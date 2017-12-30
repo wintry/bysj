@@ -99,7 +99,11 @@ async def add_user(request):
 
 @user_bp.post('/add_user_two')
 async def add_user_two(request):
-    data = request.json        
+    user = await  data_util.token(request, 3)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
+    data = request.json
     try :
         data['username']
         data['pwd']

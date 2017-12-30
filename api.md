@@ -44,3 +44,18 @@ post
 {
     "status": "succeed"
 }
+
+
+添加缺陷管理员 带token  
+user/add_user_two  
+post  
+{
+	"username":"yjg1",
+	"pwd":"bbb",
+	"phone":"18777777777"
+}  
+{
+    "status": "succeed"
+}  
+
+
