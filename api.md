@@ -204,4 +204,34 @@ post
             "detail": "阿萨德飞洒1"
         }
     ]
-}
+}  
+
+
+查看所有bug
+/bugs/get_bugs token
+get
+{
+    "product": [
+        {
+            "line_id": null,
+            "create_time": null,
+            "id": 2,
+            "img": null,
+            "product_id": null,
+            "detail": null,
+            "title": "发生",
+            "user_id": null
+        },
+        {
+            "line_id": 2,
+            "create_time": "asdas",
+            "id": 1,
+            "img": "sadfasd",
+            "product_id": 1,
+            "detail": "阿萨德飞洒1",
+            "title": "cnm",
+            "user_id": 2
+        }
+    ],
+    "msg_code": "001"
+}  

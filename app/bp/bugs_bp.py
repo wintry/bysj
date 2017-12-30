@@ -53,3 +53,17 @@ async def se_bugs(request):
     for i in bugs:
         bug_list.append(dict(i))
     return response.json(response_util.success(product=bug_list))
+
+@bugs_bp.get('/get_bugs')
+async def get_bugs(request):
+    user = await  data_util.token(request, 1)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
+    async with bugs_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''select * from "bugs" ORDER BY id DESC ''')
+        bugs = await stmt.fetch()
+    bug_list = []
+    for i in bugs:
+        bug_list.append(dict(i))
+    return response.json(response_util.success(product=bug_list))
