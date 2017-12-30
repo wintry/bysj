@@ -9,11 +9,18 @@ from utils import MD5_util,response_util,data_util
 product_bp=Blueprint('product_bp',url_prefix='/product')
 
 
-@product_bp.route('/add_product/<name:string>')
-async def add_product(request,name):
+@product_bp.post('/add_product')
+async def add_product(request):
+    user = await  data_util.token(request, 3)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
+    data = request.json
+
+
     async with product_bp.pool.acquire() as conn:
-        stmt = await conn.prepare('''insert into  "product" (name,lv) values ($1,$2) ''')
-        await stmt.fetchrow(name,0)
+        stmt = await conn.prepare('''insert into  "product" (name,fid) values ($1,$2) ''')
+        await stmt.fetchrow(data['name'],0)
     return response.json({"status": "succeed"})
 
 

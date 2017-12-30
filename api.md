@@ -58,4 +58,14 @@ post
     "status": "succeed"
 }  
 
+添加产品 带token  
+product/add_product  
+post  
+{
+	"name":"sony ps4"
+}  
+{
+    "status": "succeed"
+}  
+
 
