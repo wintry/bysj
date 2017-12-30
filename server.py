@@ -5,6 +5,7 @@ from app.exceptions import app_exception
 from app.bp.user_bp import user_bp
 from app.bp.product_bp import product_bp
 from app.bp.bugs_bp import bugs_bp
+from app.bp.logs_bp import logs_bp
 from app.pg.pg import *
 
 
@@ -16,6 +17,7 @@ app = Sanic(__name__)
 app.blueprint(user_bp)
 app.blueprint(product_bp)
 app.blueprint(bugs_bp)
+app.blueprint(logs_bp)
 
 
 @app.listener('after_server_start')
@@ -24,6 +26,7 @@ async def notify_server_started(app, loop):
     user_bp.pool = db_pool
     product_bp.pool = db_pool
     bugs_bp.pool= db_pool
+    logs_bp.pool = db_pool
     pass
 
 
