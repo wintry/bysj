@@ -42,11 +42,25 @@ async def edit_product(request):
         await stmt.fetchrow(data['name'],data['product_id'])
     return response.json({"status": "succeed"})
 
-@product_bp.route('/del_product/<product_id:int>')
-async def del_product(request,product_id):
+@product_bp.post('/del_product')
+async def del_product(request):
+    user = await  data_util.token(request, 3)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+    data = request.json
+
     async with product_bp.pool.acquire() as conn:
-        stmt = await conn.prepare('''delete form  "product" where id = $1 ''')
-        await stmt.fetchrow(product_id)
+        stmt = await conn.prepare('''select * from "product" WHERE id = $1''')
+        product = dict(await stmt.fetchrow(data['product_id']))
+
+    async with product_bp.pool.acquire() as conn:
+        stmt = await conn.prepare('''delete from  "product" where id = $1 ''')
+        await stmt.fetchrow(data['product_id'])
+    if product['fid'] == 0:
+        async with product_bp.pool.acquire() as conn:
+            stmt = await conn.prepare('''delete from  "product" where fid = $1 ''')
+            await stmt.fetchrow(data['product_id'])
+
     return response.json({"status": "succeed"})
 
 

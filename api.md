@@ -92,3 +92,17 @@ post
     "status": "succeed"
 }  
 
+删除产品和节点 带token  
+/product/del_product
+post  
+{
+	
+	"product_id":1
+}  
+{
+	
+	"product_id":1
+}  
+
+
+
