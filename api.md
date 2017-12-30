@@ -1,4 +1,5 @@
-user/login  
+登陆  
+user/login    
 post  
 {"username":"xuyh",
 "pwd":"aaa"}  
@@ -11,4 +12,13 @@ post
         "lv": 1
     },
     "msg_code": "001"
-}
+}  
+
+修改手机  
+user/eidt_phone  
+post  
+{"phone":"13777777777"}  
+{
+    "status": "succeed"
+}  
+

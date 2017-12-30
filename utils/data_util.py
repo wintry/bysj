@@ -22,6 +22,33 @@ def password(password):
         return True
     return False
 
+async def token(request,lv):
+    try:
+        value =request.headers['token']
+    except KeyError:
+        return False
+    #以token为key取value
+    if not len(value)==32:
+        return False
+
+    datapool = await pg.setup_connection()
+    try:
+        async with datapool.acquire() as conn:
+            stmt = await conn.prepare('''select * from "user" WHERE token = $1''')
+            user = await stmt.fetchrow(value)
+    except:
+        return False
+    if not user:
+        return False
+    if user['lv']<lv:
+        return False
+    return user
+
+
+
+
+
+
 # # 检查token
 # def token_check(func):
 #     @wraps(func)

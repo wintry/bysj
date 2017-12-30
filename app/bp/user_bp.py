@@ -43,8 +43,11 @@ async def login(request):
 
 @user_bp.post('/edit_phone')
 async def edit_phone(request):
+    user=await  data_util.token(request,1)
+    if user==False:
+        return response.json({"status":"002","message":"no permission"})
     data = request.json
-    user_id = request.form.get('user_id')
+    user_id = user['id']
     async with user_bp.pool.acquire() as conn:
         stmt = await conn.prepare('''update "user" set phone = $1 WHERE id = $2''')
         await stmt.fetchrow(data['phone'],user_id)
