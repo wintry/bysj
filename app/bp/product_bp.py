@@ -53,6 +53,9 @@ async def del_product(request,product_id):
 
 @product_bp.post('/add_line')
 async def add_line(request):
+    user = await  data_util.token(request, 3)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
     data = request.json
     try:
         data['product_id']
@@ -61,7 +64,7 @@ async def add_line(request):
         raise app_exception.params_error(str(e)+'is empty or wrong')
     
     async with product_bp.pool.acquire() as conn:
-        stmt = await conn.prepare('''insert into  "product" (name,lv) values ($1,$2) ''')
+        stmt = await conn.prepare('''insert into  "product" (name,fid) values ($1,$2) ''')
         await stmt.fetchrow(data['name'],data['product_id'])
     return response.json({"status": "succeed"})
 

@@ -74,9 +74,21 @@ post
 post 
 {
 	"name":"sony ps4 pro"
+	"product_id":1
 }  
 {
     "status": "succeed"
 }   
 
+
+添加产品节点 带token  
+/product/add_line  
+post  
+{
+	"name":"sony ps4 slim"
+	"product_id":1   产品的id
+}  
+{
+    "status": "succeed"
+}  
 
