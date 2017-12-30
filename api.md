@@ -133,3 +133,22 @@ post
     "msg_code": "001"
 }
 
+搜索产品 带token  
+/product/se_product  
+post  
+{
+	
+	"key":"son"
+}  
+{
+    "msg_code": "001",
+    "product": [
+        {
+            "fid": 0,
+            "id": 1,
+            "name": "sony"
+        }
+    ]
+}
+  
+
