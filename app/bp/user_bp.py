@@ -77,7 +77,12 @@ async def edit_pwd(request):
 
 @user_bp.post('/add_user')
 async def add_user(request):
-    data = request.json        
+    user = await  data_util.token(request, 2)
+    if user == False:
+        return response.json({"status": "002", "message": "no permission"})
+
+
+    data = request.json
     try :
         data['username']
         data['pwd']

@@ -32,3 +32,15 @@ post
 {
     "status": "succeed"
 }
+
+添加测试人员 带token  
+user/add_user  
+post  
+{
+	"username":"yjg",
+	"pwd":"bbb",
+	"phone":"18777777777"
+}  
+{
+    "status": "succeed"
+}

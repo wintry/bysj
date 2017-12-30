@@ -7,6 +7,7 @@ from app.bp.product_bp import product_bp
 from app.pg.pg import *
 
 
+
 app = Sanic(__name__)
 
 
