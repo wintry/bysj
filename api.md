@@ -165,3 +165,21 @@ post
 {
     "status": "succeed"
 }
+
+
+修改bug 带token  
+http://0.0.0.0:8080/bugs/edit_bug  
+post  
+{
+	"title":"cnm",
+	"detail":"阿萨德飞洒1111",
+	"product_id":1,
+	"line_id":2,
+	"time":"asdas",
+	"img":"sadfasd",
+	"id":1
+}   
+{
+    "message": "no permission",
+    "status": "002"
+}
